@@ -22,7 +22,7 @@
              * callback param:
              *      {
              *          success: true,
-             *          params: {
+             *          ticketData: {
              *              id: "1",
              *              owner: "you"
              *          },
@@ -114,7 +114,7 @@
                 return {
                     success: success,
                     errorText: errorText,
-                    params: data
+                    ticketData: data
                 };
             },
             ajax: function(ajaxParams){
