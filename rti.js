@@ -12,6 +12,7 @@
 
             function init() {
                 this.url = cfg.url || this.url; // always put a property in instance, I wanna see it in console
+                this.debug = typeof cfg.debug !== 'undefined' ? cfg.debug : this.debug;
             }
 
             /**
@@ -50,6 +51,7 @@
              */
             url: 'http://rt.easter-eggs.org/demos/4.2/',
             getTicketPattern: 'ticket/%id%/show',
+            debug: true,
             /**
              * Custom AJAX function, implement it yourself if wanna be jquery-independent
              */
@@ -58,26 +60,26 @@
                 var parsedRes = this.parseResponse(res);
 
                 if (!parsedRes.success){
-                    console.error('Error getting ticket data: ', parsedRes.errorText || '<No error text>');
+                    this.debug && console.error('Error getting ticket data: ', parsedRes.errorText || '<No error text>');
                 }else if ( callback && typeof callback === 'function' ){
                     callback(parsedRes); // assuming scope and everything is bound already
                 }
             },
-            onGetTicketError: function (callback, res) {debugger;
+            onGetTicketError: function (callback, res) {
                 var errorText = res.statusText || '<No error text>';
-                console.error('Error getting ticket data: ', errorText, ' Status: ' + res.status);
+                this.debug && console.error('Error getting ticket data: ', errorText, ' Status: ' + res.status);
 
                 if ( callback && typeof callback === 'function' ){
                     callback({
                         success: false,
-                        params: {},
+                        data: {},
                         errorText: errorText
                     });
                 }
             },
             parseResponse: function(ticketResponse){
-                var r, statusLine, emptyLine, possibleErrorLine, params, line, success, errorText;
-                params = {};
+                var r, statusLine, emptyLine, possibleErrorLine, data, line, success, errorText;
+                data = {};
                 success = true;
                 errorText ='';
                 r = ticketResponse;
@@ -103,7 +105,7 @@
                                 if (line[0] === 'id'){
                                     line[1] = line[1].replace('ticket/', '');
                                 }
-                                params[line[0]] = line[1];
+                                data[line[0]] = line[1];
                             }
                         }
                     }
@@ -112,7 +114,7 @@
                 return {
                     success: success,
                     errorText: errorText,
-                    params: params
+                    params: data
                 };
             },
             ajax: function(ajaxParams){
