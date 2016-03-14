@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Request Tracker JSON</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+        <script src="rti.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div id="result"></div>
+        <script>
+            var RT = new RTIConstructor({
+            });
+            if (RT){
+                document.getElementById('result').innerHTML = JSON.stringify(RT);
+                RT.getTicket(350219);
+            }
+        </script>
+    </body>
+</html>
